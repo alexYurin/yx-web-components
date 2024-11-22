@@ -11,15 +11,24 @@ export default class YxDialog extends YxBaseComponent(
 ) {
   public static ANIMATION_DURATION = 200
 
-  public static SELECTORS = {
-    header: `.${YxDialog.JS_NAME}-header`,
-    content: `.${YxDialog.JS_NAME}-content`,
+  public static ACTIONS = {
+    show: `${YxDialog.JS_NAME}-show`,
+    hide: `${YxDialog.JS_NAME}-hide`,
   }
 
   public static DATA_SET = {
     show: 'data-dialog-show',
     hide: 'data-dialog-hide',
     headerText: 'data-header',
+  }
+
+  public static SELECTORS = {
+    header: `.${YxDialog.JS_NAME}-header`,
+    headerText: `.${YxDialog.JS_NAME}-header-text`,
+    wrapper: `.${YxDialog.JS_NAME}-wrapper`,
+    content: `.${YxDialog.JS_NAME}-content`,
+    showTrigger: `[${YxDialog.DATA_SET.show}]`,
+    hideTrigger: `[${YxDialog.DATA_SET.hide}]`,
   }
 
   public static MODS = {
@@ -40,10 +49,10 @@ export default class YxDialog extends YxBaseComponent(
   protected connectedCallback() {
     super.connectedCallback()
 
-    const HTMLHeader = this.querySelector(YxDialog.SELECTORS.header)
+    const HTMLHeaderText = this.querySelector(YxDialog.SELECTORS.headerText)
 
-    if (HTMLHeader) {
-      HTMLHeader.textContent =
+    if (HTMLHeaderText) {
+      HTMLHeaderText.textContent =
         this.getAttribute(YxDialog.DATA_SET.headerText) || ''
     }
 
@@ -85,33 +94,12 @@ export default class YxDialog extends YxBaseComponent(
 
   private isOutsideClick(event: MouseEvent) {
     const target = event.target as HTMLElement
-    const closeButton = target.closest(`[${YxDialog.DATA_SET.hide}]`)
+    const isContentClick = Boolean(target.closest(YxDialog.SELECTORS.wrapper))
+    const isHideButtonClick = Boolean(
+      target.closest(YxDialog.SELECTORS.hideTrigger),
+    )
 
-    const extraCloseButton = Array.from(
-      this.querySelectorAll(`[${YxDialog.DATA_SET.hide}]`),
-    ).find(closeElement => {
-      const targetCloseButton = target.closest(`[${YxDialog.DATA_SET.hide}]`)
-
-      return closeElement?.isSameNode(targetCloseButton)
-    })
-
-    const isChildHeader = this.querySelector(
-      YxDialog.SELECTORS.header,
-    )?.contains(target)
-
-    const isChildContent = this.querySelector(
-      YxDialog.SELECTORS.content,
-    )?.contains(target)
-
-    const isChildClick = isChildHeader || isChildContent
-
-    const isCloseButton = Boolean(closeButton || extraCloseButton)
-
-    if (isCloseButton) {
-      return true
-    }
-
-    if (isChildClick) {
+    if (isContentClick && !isHideButtonClick) {
       return false
     }
 
@@ -120,7 +108,7 @@ export default class YxDialog extends YxBaseComponent(
 
   private addSubscriptions() {
     document
-      .querySelectorAll(`[${YxDialog.DATA_SET.show}]`)
+      .querySelectorAll(YxDialog.SELECTORS.showTrigger)
       .forEach(HTMLShowTrigger => {
         this.subscribe('on', {
           eventName: 'click',
@@ -128,16 +116,6 @@ export default class YxDialog extends YxBaseComponent(
           callback: this.show,
         })
       })
-
-    this.querySelectorAll(`[${YxDialog.DATA_SET.hide}]`).forEach(
-      HTMLHideTrigger => {
-        this.subscribe('on', {
-          eventName: 'click',
-          element: HTMLHideTrigger,
-          callback: this.hide,
-        })
-      },
-    )
 
     this.subscribe('on', {
       eventName: 'click',

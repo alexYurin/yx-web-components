@@ -11,6 +11,6 @@ export const defineYxWebComponents = () => {
 }
 
 export const setTheme = (themeName: 'light' | 'dark') => {
-  document.body.classList.remove('theme-light', 'theme-dark')
-  document.body.classList.add(`theme-${themeName}`)
+  document.documentElement.classList.remove('theme-light', 'theme-dark')
+  document.documentElement.classList.add(`theme-${themeName}`)
 }
