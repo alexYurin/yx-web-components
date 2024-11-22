@@ -1,0 +1,20 @@
+@use 'styles/mixins' as mx;
+@use 'styles/config' as cfg;
+
+.text {
+  @include mx.themify('color', 'text-black');
+
+  &_primary {
+    @include mx.themify('color', 'primary');
+  }
+
+  &_green-dark {
+    @include mx.themify('color', 'primary');
+  }
+
+  @each $font-weight-name, $font-weight-value in cfg.$font-weights {
+    &_weight_#{$font-weight-name} {
+      font-weight: $font-weight-value;
+    }
+  }
+}

@@ -1,0 +1,229 @@
+@use 'styles/mixins' as mx;
+@use 'styles/config' as cfg;
+@use 'styles/functions' as fn;
+
+$component: yx-dialog;
+
+$animation-duration: 300; // ms
+$animation-duration-delta: 100; // ms
+
+$animation-duration-backdrop: $animation-duration + $animation-duration-delta;
+
+$shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
+
+.#{$component} {
+  @include mx.themify('background-color', 'drop');
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: fn.offset(2);
+  width: 100%;
+  max-width: unset;
+  height: 100%;
+  max-height: unset;
+  border: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 9999;
+
+  &[open] {
+    display: flex;
+    animation: show-dialog #{$animation-duration}ms linear normal;
+
+    &::backdrop {
+      animation: show-backdrop #{$animation-duration-backdrop}ms ease;
+    }
+  }
+
+  &::backdrop {
+    @include mx.themify('background-color', 'modal-backdrop-bg');
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: none;
+  }
+
+  &.#{$component}_hidden {
+    animation: hide-dialog #{$animation-duration}ms linear normal;
+
+    &::backdrop {
+      animation: hide-backdrop #{$animation-duration-backdrop}ms ease;
+    }
+  }
+
+  &_side {
+    &_right,
+    &_left {
+      margin: 0 0 fn.offset();
+      padding: 0;
+
+      .#{$component}__wrapper {
+        margin: 0;
+        height: 100vh;
+      }
+
+      .#{$component}__content {
+        height: calc(100% - 90px);
+        overflow-y: auto;
+      }
+    }
+
+    &_right {
+      &[open] {
+        animation: show-dialog-right #{$animation-duration}ms linear normal;
+      }
+
+      &.#{$component}_hidden {
+        animation: hide-dialog-right #{$animation-duration}ms linear normal;
+      }
+    }
+
+    &_left {
+      &[open] {
+        animation: show-dialog-left #{$animation-duration}ms linear normal;
+      }
+
+      &.#{$component}_hidden {
+        animation: hide-dialog-left #{$animation-duration}ms linear normal;
+      }
+    }
+  }
+
+  &__wrapper {
+    @include mx.themify('color', 'modal-color');
+
+    padding: 0;
+    width: 100%;
+    max-width: 500px;
+    max-height: 100%;
+    border: none;
+    border-radius: fn.border-radius(2);
+
+    @include mx.tablet {
+      box-shadow: $shadow-config;
+    }
+  }
+
+  &__header {
+    @include mx.themify('background-color', 'c-white');
+    @include mx.themify('border-color', 'accent-muted');
+
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    padding: fn.offset(3.5) fn.offset(4) fn.offset(1.5);
+    border-radius: fn.border-radius(2) fn.border-radius(2) 0 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  &__header-title {
+    margin: 0;
+    width: 100%;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 2.24rem;
+    hyphens: auto;
+  }
+
+  &__header-close {
+    @include mx.themify('color', 'primary');
+
+    padding: fn.offset();
+    margin: 0 -0.24rem 0 auto;
+    align-self: baseline;
+    cursor: pointer;
+
+    &:active,
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  &__content {
+    @include mx.themify('background-color', 'c-white');
+
+    display: flex;
+    flex-direction: column;
+    padding: fn.offset(4) fn.offset(4) fn.offset(5);
+    height: 100%;
+    border-radius: 0 0 fn.border-radius(2) fn.border-radius(2);
+  }
+}
+
+@keyframes show-dialog-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes hide-dialog-right {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes show-dialog-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes hide-dialog-left {
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes show-dialog {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes hide-dialog {
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes show-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hide-backdrop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

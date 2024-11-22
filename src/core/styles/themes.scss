@@ -1,0 +1,59 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'styles/colors' as clr;
+
+$theme-base-light: (
+  primary: clr.$accent,
+  main-bg: clr.$white-100,
+
+  accent-muted: clr.$accent-muted,
+  accent-muted-light: clr.$accent-muted-light,
+  accent-medium: clr.$accent-medium,
+  accent-dark: clr.$accent-dark,
+
+  input-focus-border: color.adjust(clr.$accent-muted, $blackness: 15%),
+  success-light: color.adjust(clr.$green, $alpha: -0.95),
+  primary-light: color.adjust(clr.$accent, $alpha: -0.95),
+  warning-light: color.adjust(clr.$yellow, $alpha: -0.95),
+  alert-light: color.adjust(clr.$red, $alpha: -0.95),
+  c-black: clr.$black-100,
+  c-white: clr.$white-100,
+  c-gray: clr.$gray,
+  c-gray_hover: color.adjust(clr.$gray, $blackness: 3%),
+  c-gray-dark: clr.$gray-dark,
+  c-gray-light: clr.$gray-light,
+  c-gray-deep: clr.$gray-deep,
+  c-gray-dark_hover: color.adjust(clr.$gray-dark, $blackness: 3%),
+  dark: clr.$dark,
+  c-muted: clr.$muted,
+  c-red: clr.$red,
+  c-green: clr.$green,
+  c-yellow: clr.$yellow,
+  c-blue-light: clr.$blue-light,
+  c-red-light: clr.$red-light,
+
+  drop: transparent,
+);
+
+$theme-base-dark: (
+  drop: transparent,
+);
+
+@function mergeThemes($components-themes...) {
+  $theme-light: $theme-base-light;
+  $theme-dark: $theme-base-dark;
+
+  @each $theme in $components-themes {
+    $theme-light: map.merge($theme-light, map.get($theme, 'light'));
+    $theme-dark: map.merge($theme-dark, map.get($theme, 'dark'));
+  }
+
+  $themes: (
+    'dark': $theme-dark,
+    'light': $theme-light,
+  );
+
+  @return $themes;
+}
+
+$themes: mergeThemes() !default;

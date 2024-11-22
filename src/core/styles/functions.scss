@@ -1,0 +1,43 @@
+@use 'sass:math';
+@use 'sass:map';
+@use 'styles/config' as cfg;
+@use 'styles/themes' as *;
+
+@function get-theme-color($theme-name, $theme-color) {
+  $theme-colors: map.get($themes, $theme-name);
+
+  @if $theme-colors {
+    @return map.get($theme-colors, $theme-color);
+  }
+
+  @return null;
+}
+
+@function get-color($theme-color) {
+  $color: false;
+
+  @each $theme, $colors in $themes {
+    $color: map-get($colors, $theme-color);
+  }
+  @return $color;
+}
+
+@function offset($increment: false) {
+  @if $increment {
+    @return calc(#{cfg.$offset} * #{$increment});
+  }
+
+  @return cfg.$offset;
+}
+
+@function border-radius($increment: false) {
+  @if $increment {
+    @return calc(#{cfg.$border-radius} * #{$increment});
+  }
+
+  @return cfg.$border-radius;
+}
+
+@function half($size) {
+  @return math.div($size, 2);
+}

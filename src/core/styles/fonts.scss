@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'Adjusted Regular';
+  src: local(Arial);
+  size-adjust: 102%;
+}
+
+@font-face {
+  font-family: 'Sarala';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Sarala Regular'),
+    url('fonts/Sarala/Sarala-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sarala';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Sarala Bold'),
+    url('fonts/Sarala/Sarala-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Palanquin';
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Palanquin Bold'),
+    url('fonts/Palanquin/Palanquin-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Palanquin';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Palanquin Medium'),
+    url('fonts/Palanquin/Palanquin-Medium.woff2') format('woff2');
+}

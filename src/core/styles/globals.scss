@@ -1,0 +1,55 @@
+@use 'styles/helpers';
+@use 'styles/text';
+@use 'styles/mixins' as mx;
+@use 'styles/config' as cfg;
+
+html {
+  width: 100%;
+  height: 100%;
+  height: -webkit-fill-available;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
+  background-color: transparent;
+  font-size: 62.5%;
+}
+
+body {
+  @include mx.themify('background-color', 'main-bg');
+
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
+  overflow-y: auto;
+  align-items: stretch;
+  font-size: 1.4rem;
+  font-family: cfg.$font-family-default;
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  &.fixed {
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    -ms-touch-action: none;
+  }
+
+  &.transition-disabled {
+    * {
+      transition: none !important;
+      // visibility: hidden;
+    }
+  }
+
+  .bg-gray {
+    @include mx.themify('background-color', 'c-gray');
+  }
+}
