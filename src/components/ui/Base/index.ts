@@ -30,6 +30,8 @@ const YxBaseComponent = <TClass extends new (...args: any[]) => HTMLElement>(
     protected connectedCallback() {
       this.classList.add(Base.NAME)
 
+      const children = [...this.children]
+
       const html = new DOMParser()
         .parseFromString(template, 'text/html')
         .querySelector('template')
@@ -37,8 +39,6 @@ const YxBaseComponent = <TClass extends new (...args: any[]) => HTMLElement>(
       if (!html) {
         return
       }
-
-      const children = this.querySelectorAll('*')
 
       this.replaceChildren()
       this.append(html.content)
@@ -48,7 +48,9 @@ const YxBaseComponent = <TClass extends new (...args: any[]) => HTMLElement>(
       ) as HTMLElement
 
       if (this.HTMLSlot) {
-        children.forEach(child => this.HTMLSlot!.appendChild(child))
+        for (const child of children.values()) {
+          this.HTMLSlot!.appendChild(child)
+        }
       }
     }
 

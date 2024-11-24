@@ -18,10 +18,10 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
   justify-content: center;
   align-items: center;
   margin: 0;
-  padding: fn.offset(2);
+  padding: fn.offset();
   width: 100%;
-  max-width: unset;
-  height: 100%;
+  max-width: calc(100% - #{fn.offset()} * 2);
+  height: calc(100% - #{fn.offset()} * 2);
   max-height: unset;
   border: 0;
   overflow-x: hidden;
@@ -59,21 +59,27 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
   &_side {
     &_right,
     &_left {
-      margin: 0 0 fn.offset();
-      padding: 0;
+      align-items: flex-start;
+      margin: 0;
+      padding-right: 0;
+      padding-left: 0;
+      max-width: 100%;
 
       .#{$component}__wrapper {
         margin: 0;
-        height: 100vh;
+        height: 100%;
+        max-height: calc(100vh - #{fn.offset()} * 2);
       }
 
       .#{$component}__content {
-        height: calc(100% - 90px);
+        flex-grow: 1;
         overflow-y: auto;
       }
     }
 
     &_right {
+      justify-content: flex-end;
+
       &[open] {
         animation: show-dialog-right #{$animation-duration}ms linear normal;
       }
@@ -81,9 +87,19 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
       &.#{$component}_hidden {
         animation: hide-dialog-right #{$animation-duration}ms linear normal;
       }
+
+      .#{$component}__header {
+        border-radius: fn.border-radius(2) 0 0 0;
+      }
+
+      .#{$component}__content {
+        border-radius: 0 0 0 fn.border-radius(2);
+      }
     }
 
     &_left {
+      justify-content: flex-start;
+
       &[open] {
         animation: show-dialog-left #{$animation-duration}ms linear normal;
       }
@@ -91,22 +107,27 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
       &.#{$component}_hidden {
         animation: hide-dialog-left #{$animation-duration}ms linear normal;
       }
+
+      .#{$component}__header {
+        border-radius: 0 fn.border-radius(2) 0 0;
+      }
+
+      .#{$component}__content {
+        border-radius: 0 0 fn.border-radius(2) 0;
+      }
     }
   }
 
   &__wrapper {
     @include mx.themify('color', 'modal-color');
 
+    display: flex;
+    flex-direction: column;
     padding: 0;
     width: 100%;
-    max-width: 500px;
+    max-width: min(90vw, 500px);
     max-height: 100%;
     border: none;
-    border-radius: fn.border-radius(2);
-
-    @include mx.tablet {
-      box-shadow: $shadow-config;
-    }
   }
 
   &__header {
@@ -114,12 +135,14 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
     @include mx.themify('border-color', 'accent-muted');
 
     display: flex;
+    position: relative;
     align-items: center;
     flex-flow: row nowrap;
-    padding: fn.offset(3.5) fn.offset(4) fn.offset(1.5);
+    padding: fn.offset(2.5) fn.offset(3) fn.offset(1.5);
     border-radius: fn.border-radius(2) fn.border-radius(2) 0 0;
     border-bottom-width: 1px;
     border-bottom-style: solid;
+    z-index: 2;
   }
 
   &__header-title {
@@ -150,10 +173,13 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
     @include mx.themify('background-color', 'c-white');
 
     display: flex;
+    position: relative;
     flex-direction: column;
-    padding: fn.offset(4) fn.offset(4) fn.offset(5);
+    padding: fn.offset(2) fn.offset(3) fn.offset(3);
     height: 100%;
     border-radius: 0 0 fn.border-radius(2) fn.border-radius(2);
+    box-shadow: $shadow-config;
+    z-index: 1;
   }
 }
 

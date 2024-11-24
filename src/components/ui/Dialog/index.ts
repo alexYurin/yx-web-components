@@ -4,6 +4,8 @@ import './index.scss'
 
 export const NAME = 'dialog'
 
+export type YxDialogSideName = 'left' | 'right' | 'default'
+
 export default class YxDialog extends YxBaseComponent(
   NAME,
   template,
@@ -17,8 +19,9 @@ export default class YxDialog extends YxBaseComponent(
   }
 
   public static DATA_SET = {
-    show: 'data-dialog-show',
-    hide: 'data-dialog-hide',
+    id: 'data-dialog-id',
+    show: 'data-show',
+    side: 'data-side',
     headerText: 'data-header',
   }
 
@@ -27,12 +30,17 @@ export default class YxDialog extends YxBaseComponent(
     headerText: `.${YxDialog.JS_NAME}-header-text`,
     wrapper: `.${YxDialog.JS_NAME}-wrapper`,
     content: `.${YxDialog.JS_NAME}-content`,
-    showTrigger: `[${YxDialog.DATA_SET.show}]`,
-    hideTrigger: `[${YxDialog.DATA_SET.hide}]`,
+    showTrigger: `.${YxDialog.JS_NAME}-show`,
+    hideTrigger: `.${YxDialog.JS_NAME}-hide`,
   }
 
   public static MODS = {
     hidden: `${YxDialog.NAME}_hidden`,
+    side: {
+      left: `${YxDialog.NAME}_side_left`,
+      right: `${YxDialog.NAME}_side_right`,
+      default: `${YxDialog.NAME}_side_default`,
+    },
   }
 
   public static define() {
@@ -56,7 +64,19 @@ export default class YxDialog extends YxBaseComponent(
         this.getAttribute(YxDialog.DATA_SET.headerText) || ''
     }
 
+    const sideName = this.getAttribute(
+      YxDialog.DATA_SET.side,
+    ) as YxDialogSideName
+
+    this.classList.add(
+      YxDialog.MODS.side[sideName] || YxDialog.MODS.side['default'],
+    )
+
     this.addSubscriptions()
+
+    if (this.hasAttribute(YxDialog.DATA_SET.show)) {
+      this.show()
+    }
   }
 
   public show(event?: Event) {
@@ -67,10 +87,11 @@ export default class YxDialog extends YxBaseComponent(
     const target = event?.target as HTMLElement
 
     const isButtonTrigger =
-      target && target.getAttribute(YxDialog.DATA_SET.show) === this.id
+      target && target.getAttribute(YxDialog.DATA_SET.id) === this.id
 
     if (isButtonTrigger || !event) {
       this.showModal()
+      this.scrollTo(0, 0)
 
       return
     }
@@ -79,6 +100,11 @@ export default class YxDialog extends YxBaseComponent(
   public hide(event?: MouseEvent) {
     if (event && !this.isOutsideClick(event)) {
       return
+    }
+
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
     }
 
     this.classList.add(YxDialog.MODS.hidden)
