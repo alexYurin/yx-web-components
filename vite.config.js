@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       __PREFIX__: JSON.stringify(env.PREFIX),
-      __PREFIX_JS__: JSON.stringify(`\\@${env.PREFIX}`),
+      __PREFIX_JS__: JSON.stringify('\\@'),
       __APP_VERSION__: JSON.stringify(env.npm_package_version),
       __NODE_ENV__: JSON.stringify(env.NODE_ENV),
       __THEME__: JSON.stringify(env.THEME),
@@ -27,6 +27,9 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'build',
       emptyOutDir: true,
+      rollupOptions: {
+        input: resolve('src/core/styles/core.scss'),
+      },
     },
   }
 })

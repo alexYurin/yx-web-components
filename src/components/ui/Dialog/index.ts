@@ -1,37 +1,37 @@
 import YxBaseComponent from '@/components/ui/Base'
+
 import template from './template.html?raw'
-import './index.scss'
+import urlStyles from './index.scss?url'
 
-export const NAME = 'dialog'
+export type YxDialogSideModeType = 'left' | 'right' | 'default'
 
-export type YxDialogSideName = 'left' | 'right' | 'default'
+export default class YxDialog extends YxBaseComponent(template, urlStyles) {
+  public static NAME = 'dialog'
 
-export default class YxDialog extends YxBaseComponent(
-  NAME,
-  template,
-  HTMLDialogElement,
-) {
-  public static ANIMATION_DURATION = 200
+  public static JS_ROOT_SELECTOR = `${__PREFIX_JS__}${YxDialog.NAME}`
 
   public static ACTIONS = {
-    show: `${YxDialog.JS_NAME}-show`,
-    hide: `${YxDialog.JS_NAME}-hide`,
+    show: `${YxDialog.NAME}-show`,
+    hide: `${YxDialog.NAME}-hide`,
   }
 
   public static DATA_SET = {
     id: 'data-dialog-id',
-    show: 'data-show',
-    side: 'data-side',
-    headerText: 'data-header',
+  }
+
+  public static ATTRIBUTES = {
+    show: 'show',
+    side: {
+      left: 'side-left',
+      right: 'side-right',
+    },
   }
 
   public static SELECTORS = {
-    header: `.${YxDialog.JS_NAME}-header`,
-    headerText: `.${YxDialog.JS_NAME}-header-text`,
-    wrapper: `.${YxDialog.JS_NAME}-wrapper`,
-    content: `.${YxDialog.JS_NAME}-content`,
-    showTrigger: `.${YxDialog.JS_NAME}-show`,
-    hideTrigger: `.${YxDialog.JS_NAME}-hide`,
+    dialog: `.${YxDialog.JS_ROOT_SELECTOR}`,
+    container: `.${YxDialog.JS_ROOT_SELECTOR}-container`,
+    showTrigger: `.${YxDialog.JS_ROOT_SELECTOR}-show`,
+    hideTrigger: `.${YxDialog.JS_ROOT_SELECTOR}-hide`,
   }
 
   public static MODS = {
@@ -43,8 +43,12 @@ export default class YxDialog extends YxBaseComponent(
     },
   }
 
+  public static ANIMATION_DURATION = 200
+
   public static define() {
-    customElements.define(YxDialog.NAME, YxDialog, { extends: 'dialog' })
+    customElements.define('yx-dialog', YxDialog, {
+      extends: 'dialog',
+    })
   }
 
   constructor() {
@@ -52,34 +56,31 @@ export default class YxDialog extends YxBaseComponent(
 
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
-  }
-
-  protected connectedCallback() {
-    super.connectedCallback()
-
-    const HTMLHeaderText = this.querySelector(YxDialog.SELECTORS.headerText)
-
-    if (HTMLHeaderText) {
-      HTMLHeaderText.textContent =
-        this.getAttribute(YxDialog.DATA_SET.headerText) || ''
-    }
-
-    const sideName = this.getAttribute(
-      YxDialog.DATA_SET.side,
-    ) as YxDialogSideName
-
-    this.classList.add(
-      YxDialog.MODS.side[sideName] || YxDialog.MODS.side['default'],
-    )
 
     this.addSubscriptions()
 
-    if (this.hasAttribute(YxDialog.DATA_SET.show)) {
+    this.setAttribute('role', 'dialog')
+
+    console.log('Constructor')
+
+    if (this.hasAttribute(YxDialog.ATTRIBUTES.show)) {
       this.show()
     }
   }
 
+  protected hideModal() {
+    this.close()
+  }
+
+  public getDialogElement() {
+    return this.shadowRoot?.querySelector(
+      YxDialog.SELECTORS.dialog,
+    ) as HTMLDialogElement
+  }
+
   public show(event?: Event) {
+    console.log('sada')
+
     if (event) {
       event.preventDefault()
     }
@@ -115,17 +116,19 @@ export default class YxDialog extends YxBaseComponent(
   private hideAnimation() {
     this.classList.remove(YxDialog.MODS.hidden)
 
-    this.close()
+    this.hideModal()
   }
 
   private isOutsideClick(event: MouseEvent) {
     const target = event.target as HTMLElement
-    const isContentClick = Boolean(target.closest(YxDialog.SELECTORS.wrapper))
+    const isContainerClick = Boolean(
+      target.closest(YxDialog.SELECTORS.container),
+    )
     const isHideButtonClick = Boolean(
       target.closest(YxDialog.SELECTORS.hideTrigger),
     )
 
-    if (isContentClick && !isHideButtonClick) {
+    if (isContainerClick && !isHideButtonClick) {
       return false
     }
 
@@ -136,15 +139,15 @@ export default class YxDialog extends YxBaseComponent(
     document
       .querySelectorAll(YxDialog.SELECTORS.showTrigger)
       .forEach(HTMLShowTrigger => {
-        this.subscribe('on', {
+        this.subscribe({
           eventName: 'click',
           element: HTMLShowTrigger,
           callback: this.show,
         })
       })
 
-    this.subscribe('on', {
-      eventName: 'click',
+    this.subscribe({
+      eventName: 'mousedown',
       callback: this.hide,
     })
   }

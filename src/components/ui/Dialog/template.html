@@ -1,11 +1,14 @@
 <template>
-  <section class="yx-dialog__wrapper @yx-dialog-wrapper">
-    <header class="yx-dialog__header">
-      <h2 class="yx-dialog__header-title @yx-dialog-header-text"></h2>
+  <div class="dialog @dialog">
+    <section class="dialog__container @dialog-container">
+      <header class="dialog__header">
+        <slot name="title" class="dialog__header-title"></slot>
+        <span class="dialog__header-close @dialog-hide">✕</span>
+      </header>
 
-      <span class="yx-dialog__header-close @yx-dialog-hide">✕</span>
-    </header>
-
-    <main class="yx-dialog__content @yx-slot"></main>
-  </section>
+      <main class="dialog__content">
+        <slot></slot>
+      </main>
+    </section>
+  </div>
 </template>

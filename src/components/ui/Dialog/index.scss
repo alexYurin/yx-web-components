@@ -2,7 +2,7 @@
 @use 'styles/config' as cfg;
 @use 'styles/functions' as fn;
 
-$component: yx-dialog;
+$component: dialog;
 
 $animation-duration: 300; // ms
 $animation-duration-delta: 100; // ms
@@ -14,7 +14,6 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
 .#{$component} {
   @include mx.themify('background-color', 'drop');
 
-  display: none;
   justify-content: center;
   align-items: center;
   margin: 0;
@@ -65,7 +64,7 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
       padding-left: 0;
       max-width: 100%;
 
-      .#{$component}__wrapper {
+      .#{$component}__container {
         margin: 0;
         height: 100%;
         max-height: calc(100vh - #{fn.offset()} * 2);
@@ -118,7 +117,7 @@ $shadow-config: 0px 40px 70px 0px rgba(0, 0, 0, 0.25);
     }
   }
 
-  &__wrapper {
+  &__container {
     @include mx.themify('color', 'modal-color');
 
     display: flex;
