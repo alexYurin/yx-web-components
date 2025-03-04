@@ -4,32 +4,53 @@ export type YxListenerProps = {
   callback: (...args: any[]) => void
 }
 
-const YxBaseComponent = (template?: string, urlStyles?: string) =>
-  class extends HTMLDialogElement {
-    protected eventController = new AbortController()
-    protected listeners: YxListenerProps[] = []
+function WcBaseComponent(name: string, template: string, urlStyles: string) {
+  return class extends HTMLElement {
+    public static NAME = name
+
+    public static JS_ROOT_SELECTOR = `${__PREFIX_JS__}${name}`
+
+    public shadowRoot: ShadowRoot
 
     public static define() {
-      console.error('Method define is not implemented')
+      customElements.define(`${__PREFIX__}-${name}`, this)
     }
 
-    protected connectedCallback() {
-      // const shadowRoot = this.attachShadow({ mode: 'open' })
-      // if (urlStyles) {
-      //   const link = document.createElement('link')
-      //   link.rel = 'stylesheet'
-      //   link.href = urlStyles
-      //   shadowRoot.append(link)
-      // }
-      // if (template) {
-      //   const htmlTemplate = new DOMParser()
-      //     .parseFromString(template, 'text/html')
-      //     .querySelector('template')?.content
-      //   shadowRoot.append(htmlTemplate!.cloneNode(true))
-      // }
+    public static get SELECTORS() {
+      return {}
     }
 
-    protected dispatch<TProps extends Record<string, any>>(
+    public static get ACTIONS() {
+      return {}
+    }
+
+    public static get DATA_SET() {
+      return {
+        NAME: {},
+        VALUE: {},
+      }
+    }
+
+    public static get MODS() {
+      return {}
+    }
+
+    protected eventController = new AbortController()
+    protected listeners: YxListenerProps[] = []
+    protected initialChildNodes: ChildNode[]
+
+    constructor() {
+      super()
+
+      this.shadowRoot = this.attachShadow({ mode: 'open' })
+      this.initialChildNodes = [...this.childNodes]
+
+      this.insertStyles()
+      this.renderTemplate()
+      this.replaceChildren()
+    }
+
+    public dispatchCustomEvent<TProps extends Record<string, any>>(
       eventName: string,
       props: TProps,
       bubbles = true,
@@ -40,6 +61,35 @@ const YxBaseComponent = (template?: string, urlStyles?: string) =>
           detail: props,
         }),
       )
+    }
+
+    public destroy(options = { withRemoveRootElement: false }) {
+      this.eventController.abort()
+
+      if (options.withRemoveRootElement) {
+        this.remove()
+      }
+    }
+
+    protected connectedCallback() {}
+
+    protected insertStyles() {
+      const link = document.createElement('link')
+
+      link.rel = 'stylesheet'
+      link.href = urlStyles
+
+      this.shadowRoot.append(link)
+    }
+
+    protected renderTemplate() {
+      const htmlTemplate = document.createElement(
+        'template',
+      ) as HTMLTemplateElement
+
+      htmlTemplate.innerHTML = template
+
+      this.shadowRoot.append(htmlTemplate.content)
     }
 
     protected subscribe<TProps extends YxListenerProps>(props: TProps) {
@@ -68,14 +118,7 @@ const YxBaseComponent = (template?: string, urlStyles?: string) =>
         return listener.eventName !== props.eventName
       })
     }
-
-    protected destroy(options = { withRemoveRootElement: false }) {
-      this.eventController.abort()
-
-      if (options.withRemoveRootElement) {
-        this.remove()
-      }
-    }
   }
+}
 
-export default YxBaseComponent
+export default WcBaseComponent

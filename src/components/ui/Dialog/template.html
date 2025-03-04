@@ -1,14 +1,11 @@
-<template>
-  <div class="dialog @dialog">
-    <section class="dialog__container @dialog-container">
-      <header class="dialog__header">
-        <slot name="title" class="dialog__header-title"></slot>
-        <span class="dialog__header-close @dialog-hide">✕</span>
-      </header>
-
-      <main class="dialog__content">
-        <slot></slot>
-      </main>
-    </section>
-  </div>
-</template>
+<dialog class="dialog @dialog">
+  <section class="dialog__container @dialog-container">
+    <header class="dialog__header">
+      <slot name="title" class="dialog__header-title"></slot>
+      <span class="dialog__header-close @dialog-hide">✕</span>
+    </header>
+    <main class="dialog__content">
+      <slot name="content"></slot>
+    </main>
+  </section>
+</dialog>

@@ -1,4 +1,6 @@
-import { defineYxWebComponents, setTheme } from './core'
+import '@ungap/custom-elements'
+
+import { defineWebComponents, setTheme } from './core'
 
 if (__NODE_ENV__ === 'development') {
   console.log(`App version: ${__APP_VERSION__}`)
@@ -7,4 +9,4 @@ if (__NODE_ENV__ === 'development') {
 
 setTheme(__THEME__ || 'light')
 
-defineYxWebComponents()
+defineWebComponents()

@@ -1,154 +1,158 @@
-import YxBaseComponent from '@/components/ui/Base'
+import WcBaseComponent from '@/components/ui/Base'
 
 import template from './template.html?raw'
 import urlStyles from './index.scss?url'
 
-export type YxDialogSideModeType = 'left' | 'right' | 'default'
+export type WcDialogSideModeType = 'left' | 'right' | 'default'
 
-export default class YxDialog extends YxBaseComponent(template, urlStyles) {
-  public static NAME = 'dialog'
+export default class WcDialog extends WcBaseComponent(
+  'dialog',
+  template,
+  urlStyles,
+) {
+  // public static NAME = 'dialog'
 
-  public static JS_ROOT_SELECTOR = `${__PREFIX_JS__}${YxDialog.NAME}`
+  // public static JS_ROOT_SELECTOR = `${__PREFIX_JS__}${WcDialog.NAME}`
 
-  public static ACTIONS = {
-    show: `${YxDialog.NAME}-show`,
-    hide: `${YxDialog.NAME}-hide`,
+  public static get ACTIONS() {
+    return {
+      show: `${WcDialog.NAME}-show`,
+      hide: `${WcDialog.NAME}-hide`,
+    }
   }
 
-  public static DATA_SET = {
-    id: 'data-dialog-id',
-  }
+  // public static DATA_SET = {
+  //   id: 'data-dialog-id',
+  // }
 
-  public static ATTRIBUTES = {
-    show: 'show',
-    side: {
-      left: 'side-left',
-      right: 'side-right',
-    },
-  }
+  // public static ATTRIBUTES = {
+  //   show: 'show',
+  //   side: {
+  //     left: 'side-left',
+  //     right: 'side-right',
+  //   },
+  // }
 
-  public static SELECTORS = {
-    dialog: `.${YxDialog.JS_ROOT_SELECTOR}`,
-    container: `.${YxDialog.JS_ROOT_SELECTOR}-container`,
-    showTrigger: `.${YxDialog.JS_ROOT_SELECTOR}-show`,
-    hideTrigger: `.${YxDialog.JS_ROOT_SELECTOR}-hide`,
-  }
+  // public static SELECTORS = {
+  //   dialog: `.${WcDialog.JS_ROOT_SELECTOR}`,
+  //   container: `.${WcDialog.JS_ROOT_SELECTOR}-container`,
+  //   showTrigger: `.${WcDialog.JS_ROOT_SELECTOR}-show`,
+  //   hideTrigger: `.${WcDialog.JS_ROOT_SELECTOR}-hide`,
+  // }
 
-  public static MODS = {
-    hidden: `${YxDialog.NAME}_hidden`,
-    side: {
-      left: `${YxDialog.NAME}_side_left`,
-      right: `${YxDialog.NAME}_side_right`,
-      default: `${YxDialog.NAME}_side_default`,
-    },
-  }
+  // public static MODS = {
+  //   hidden: `${WcDialog.NAME}_hidden`,
+  //   side: {
+  //     left: `${WcDialog.NAME}_side_left`,
+  //     right: `${WcDialog.NAME}_side_right`,
+  //     default: `${WcDialog.NAME}_side_default`,
+  //   },
+  // }
 
-  public static ANIMATION_DURATION = 200
+  // public static ANIMATION_DURATION = 200
 
-  public static define() {
-    customElements.define('yx-dialog', YxDialog, {
-      extends: 'dialog',
-    })
-  }
+  // public static define() {
+  //   customElements.define('wc-dialog', WcDialog)
+  // }
 
   constructor() {
     super()
 
-    this.show = this.show.bind(this)
-    this.hide = this.hide.bind(this)
+    // this.show = this.show.bind(this)
+    // this.hide = this.hide.bind(this)
 
-    this.addSubscriptions()
+    // this.addSubscriptions()
 
-    this.setAttribute('role', 'dialog')
+    // this.setAttribute('role', 'dialog')
 
-    console.log('Constructor')
-
-    if (this.hasAttribute(YxDialog.ATTRIBUTES.show)) {
-      this.show()
-    }
+    // if (this.hasAttribute(WcDialog.ATTRIBUTES.show)) {
+    //   this.show()
+    // }
   }
 
-  protected hideModal() {
-    this.close()
-  }
+  // protected showModal() {
+  //   this.getDialogElement().showModal()
+  // }
 
-  public getDialogElement() {
-    return this.shadowRoot?.querySelector(
-      YxDialog.SELECTORS.dialog,
-    ) as HTMLDialogElement
-  }
+  // protected hideModal() {
+  //   this.getDialogElement().close()
+  // }
 
-  public show(event?: Event) {
-    console.log('sada')
+  // public getDialogElement() {
+  //   return this.shadowRoot?.querySelector(
+  //     WcDialog.SELECTORS.dialog,
+  //   ) as HTMLDialogElement
+  // }
 
-    if (event) {
-      event.preventDefault()
-    }
+  // public show(event?: Event) {
+  //   if (event) {
+  //     event.preventDefault()
+  //   }
 
-    const target = event?.target as HTMLElement
+  //   const target = event?.target as HTMLElement
 
-    const isButtonTrigger =
-      target && target.getAttribute(YxDialog.DATA_SET.id) === this.id
+  //   const isButtonTrigger =
+  //     target && target.getAttribute(WcDialog.DATA_SET.id) === this.id
 
-    if (isButtonTrigger || !event) {
-      this.showModal()
-      this.scrollTo(0, 0)
+  //   if (isButtonTrigger || !event) {
+  //     this.showModal()
+  //     this.scrollTo(0, 0)
 
-      return
-    }
-  }
+  //     return
+  //   }
+  // }
 
-  public hide(event?: MouseEvent) {
-    if (event && !this.isOutsideClick(event)) {
-      return
-    }
+  // public hide(event?: MouseEvent) {
+  //   if (event && !this.isOutsideClick(event)) {
+  //     return
+  //   }
 
-    if (event) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
+  //   if (event) {
+  //     event.preventDefault()
+  //     event.stopPropagation()
+  //   }
 
-    this.classList.add(YxDialog.MODS.hidden)
+  //   this.classList.add(WcDialog.MODS.hidden)
 
-    setTimeout(this.hideAnimation.bind(this), YxDialog.ANIMATION_DURATION)
-  }
+  //   setTimeout(this.hideAnimation.bind(this), WcDialog.ANIMATION_DURATION)
+  // }
 
-  private hideAnimation() {
-    this.classList.remove(YxDialog.MODS.hidden)
+  // private hideAnimation() {
+  //   this.classList.remove(WcDialog.MODS.hidden)
 
-    this.hideModal()
-  }
+  //   this.hideModal()
+  // }
 
-  private isOutsideClick(event: MouseEvent) {
-    const target = event.target as HTMLElement
-    const isContainerClick = Boolean(
-      target.closest(YxDialog.SELECTORS.container),
-    )
-    const isHideButtonClick = Boolean(
-      target.closest(YxDialog.SELECTORS.hideTrigger),
-    )
+  // private isOutsideClick(event: MouseEvent) {
+  //   const target = event.target as HTMLElement
+  //   const isContainerClick = Boolean(
+  //     target.closest(WcDialog.SELECTORS.container),
+  //   )
+  //   const isHideButtonClick = Boolean(
+  //     target.closest(WcDialog.SELECTORS.hideTrigger),
+  //   )
 
-    if (isContainerClick && !isHideButtonClick) {
-      return false
-    }
+  //   if (isContainerClick && !isHideButtonClick) {
+  //     return false
+  //   }
 
-    return true
-  }
+  //   return true
+  // }
 
-  private addSubscriptions() {
-    document
-      .querySelectorAll(YxDialog.SELECTORS.showTrigger)
-      .forEach(HTMLShowTrigger => {
-        this.subscribe({
-          eventName: 'click',
-          element: HTMLShowTrigger,
-          callback: this.show,
-        })
-      })
+  // private addSubscriptions() {
+  //   document
+  //     .querySelectorAll(WcDialog.SELECTORS.showTrigger)
+  //     .forEach(HTMLShowTrigger => {
+  //       this.subscribe({
+  //         eventName: 'click',
+  //         element: HTMLShowTrigger,
+  //         callback: this.show,
+  //       })
+  //     })
 
-    this.subscribe({
-      eventName: 'mousedown',
-      callback: this.hide,
-    })
-  }
+  //   this.subscribe({
+  //     eventName: 'mousedown',
+  //     callback: this.hide,
+  //   })
+  // }
 }

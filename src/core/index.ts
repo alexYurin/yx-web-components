@@ -1,4 +1,4 @@
-export const defineYxWebComponents = () => {
+export const defineWebComponents = () => {
   import('@/components/ui').then(Components => {
     Object.keys(Components).forEach(componentKey => {
       const componentName = componentKey as keyof typeof Components
